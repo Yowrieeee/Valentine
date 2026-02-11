@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Crush</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!DOCTYPE html>
+<lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Crush</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #e91e63;
+        }
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            gap: 5px;
+            width: 500px;
+            height: 500px;
+            margin: 20px auto;
+            background: #ff5278;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .candy {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .candy:hover {
+            transform: scale(1.1);
+        }
+        .candy.selected {
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.25);
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+        .score {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        .valentine-question {
+            display: none;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        #yes {
+            background-color: #4caf50;
+            color: white;
+        }
+        #yes:hover {
+            background-color: #45a049;
+        }
+        #no {
+            background-color: #f44336;
+            color: white;
+            position: relative;
+        }
+        #no:hover {
+            background-color: #da190b;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper"></div>
+        <div class="heart1"></div>
+    <div id="heart-container"></div>
+    <script src="script.js"></script>
+    <div class="container">
+        <h1>Hii Bebi let's play Candy Crush </h1>
+        <p>Match 3 or more candies to score points! Reach 300 points to unlock the surprise.</p>
+        <div class="score" style="display: none;">Score: <span id="score">0</span></div>
+        <div class="game-board" id="game-board"></div>
+        <div class="valentine-question" id="valentine-question">
+            <h2>Hi Bebii will you be my Valentine?</h2>
+            <div id="message" class="message"></div>
+            <div class="button-container">
+                <button id="yes" class="yes-button">Yes</button>
+                <button id="no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const board = document.getElementById('game-board');
+        const scoreDisplay = document.getElementById('score');
+        const valentineQuestion = document.getElementById('valentine-question');
+        const yesButton = document.getElementById('yes');
+        const noButton = document.getElementById('no');
+        const messageDiv = document.getElementById('message');
+        let clonedYes = null;
+        let noClickCount = 0;
+        const noMessages = [
+            "Lah bat no ka dyan??? 😢",
+            "Lah Lalaaaa😢",
+            "Please say yes bebiiii! 🥺",
+            "Lah bat no parin? 😢",
+            "Sakit sa puso ah 💔",
+            "Mag yes kanaaaaaa! 😘",
+            "Sakit ah no parin talaga 😢",
+            "Ayaw mo talagaaaaaaaa? 😢",
+            "Isaaaaaa mag yes kanaaaaaa! 😘",
+            "Daaaaaaalaaaaawaaaaaaa! 😢",
+            "Iiyak na akoooooooo! 😢"
+
+        ];
+
+        const images = [
+            'https://static.wikia.nocookie.net/candy-crush-saga/images/4/45/RedcandyHTML5.png/revision/latest?cb=20211029175619', 
+            'https://static.wikia.nocookie.net/candy-crush-saga/images/2/2d/BluecandyHTML5.png/revision/latest?cb=20211029175618',
+            'https://static.wikia.nocookie.net/candy-crush-saga/images/e/ee/Greencandy_bike_crushercup.png/revision/latest?cb=20211009142944', 
+            'https://girishgodage.in/candy-crush-app/static/media/yellow-candy.a3d87a9b362b5f969133.png',   
+            'https://static.wikia.nocookie.net/candy-crush-saga/images/e/eb/PurplecandyHTML5.png/revision/latest?cb=20211029175614',   
+            'https://static.wikia.nocookie.net/candy-crush-saga/images/2/22/Orangecandy_basketball_spacejam.png/revision/latest?cb=20211009142954'    
+        ];
+
+        const selectColors = [
+            'rgba(233,30,99,0.9)', 
+            'rgba(33,150,243,0.9)', 
+            'rgba(76,175,80,0.9)', 
+            'rgba(255,235,59,0.9)', 
+            'rgba(156,39,176,0.9)', 
+            'rgba(255,152,0,0.9)' 
+        ];
+        const rows = 10;
+        const cols = 10;
+        let score = 0;
+        let selectedCandy = null;
+        let candies = [];
+
+        function initBoard() {
+            candies = [];
+            for (let r = 0; r < rows; r++) {
+                candies[r] = [];
+                for (let c = 0; c < cols; c++) {
+                    const candy = document.createElement('div');
+                    candy.classList.add('candy');
+                    const idx = Math.floor(Math.random() * images.length);
+                    candy.style.backgroundImage = `url(${images[idx]})`;
+                    candy.dataset.selectColor = selectColors[idx];
+                    candy.dataset.row = r;
+                    candy.dataset.col = c;
+                    candy.addEventListener('click', selectCandy);
+                    board.appendChild(candy);
+                    candies[r][c] = candy;
+                }
+            }
+            checkMatches(); 
+        }
+
+        function selectCandy(e) {
+            const candy = e.target;
+            if (selectedCandy) {
+                if (selectedCandy === candy) {
+                    selectedCandy.classList.remove('selected');
+                    selectedCandy.style.removeProperty('--select-color');
+                    selectedCandy = null;
+                    return;
+                }
+
+                const r1 = parseInt(selectedCandy.dataset.row);
+                const c1 = parseInt(selectedCandy.dataset.col);
+                const r2 = parseInt(candy.dataset.row);
+                const c2 = parseInt(candy.dataset.col);
+                if (Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1) {
+                    const first = selectedCandy;
+                    const second = candy;
+                    swapCandies(first, second);
+                    first.classList.remove('selected');
+                    first.style.removeProperty('--select-color');
+                    selectedCandy = null;
+                    setTimeout(() => {
+                        if (!checkMatches()) {
+
+                            swapCandies(first, second);
+                        }
+                    }, 300);
+                } else {
+                    selectedCandy.classList.remove('selected');
+                    selectedCandy.style.removeProperty('--select-color');
+                    selectedCandy = candy;
+                    candy.style.setProperty('--select-color', candy.dataset.selectColor);
+                    candy.classList.add('selected');
+                }
+            } else {
+                selectedCandy = candy;
+                candy.style.setProperty('--select-color', candy.dataset.selectColor);
+                candy.classList.add('selected');
+            }
+        }
+
+
+        function swapCandies(candy1, candy2) {
+            const tempImage = candy1.style.backgroundImage;
+            candy1.style.backgroundImage = candy2.style.backgroundImage;
+            candy2.style.backgroundImage = tempImage;
+        }
+
+
+        function checkMatches() {
+            let hasMatches = false;
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols - 2; c++) {
+                    if (candies[r][c].style.backgroundImage === candies[r][c+1].style.backgroundImage &&
+                        candies[r][c].style.backgroundImage === candies[r][c+2].style.backgroundImage) {
+                        hasMatches = true;
+                        score += 10;
+                        candies[r][c].style.backgroundImage = '';
+                        candies[r][c+1].style.backgroundImage = '';
+                        candies[r][c+2].style.backgroundImage = '';
+                    }
+                }
+            }
+
+            for (let c = 0; c < cols; c++) {
+                for (let r = 0; r < rows - 2; r++) {
+                    if (candies[r][c].style.backgroundImage === candies[r+1][c].style.backgroundImage &&
+                        candies[r][c].style.backgroundImage === candies[r+2][c].style.backgroundImage) {
+                        hasMatches = true;
+                        score += 10;
+                        candies[r][c].style.backgroundImage = '';
+                        candies[r+1][c].style.backgroundImage = '';
+                        candies[r+2][c].style.backgroundImage = '';
+                    }
+                }
+            }
+            if (hasMatches) {
+                dropCandies();
+                updateScore();
+            }
+            return hasMatches;
+        }
+
+
+        function dropCandies() {
+            for (let c = 0; c < cols; c++) {
+                let empty = rows - 1;
+                for (let r = rows - 1; r >= 0; r--) {
+                    if (candies[r][c].style.backgroundImage !== '') {
+                        candies[empty][c].style.backgroundImage = candies[r][c].style.backgroundImage;
+                        if (empty !== r) candies[r][c].style.backgroundImage = '';
+                        empty--;
+                    }
+                }
+                for (let r = 0; r <= empty; r++) {
+                    candies[r][c].style.backgroundImage = `url(${images[Math.floor(Math.random() * images.length)]})`;
+                }
+            }
+            setTimeout(checkMatches, 300);
+        }
+
+
+        function updateScore() {
+            scoreDisplay.textContent = score;
+            if (score > 0) {
+                document.querySelector('.score').style.display = 'block';
+            }
+            if (score >= 100) {
+                valentineQuestion.style.display = 'block';
+                board.style.display = 'none';
+            }
+        }
+
+
+        function yesAction() {
+            messageDiv.innerHTML = "Yay! I love you so much, Bebii! 💖<br> Happy Valentine's Day! 💖";
+
+            const existingVideo = document.getElementById('video');
+            if (existingVideo) {
+                existingVideo.remove();
+            }
+            const video = document.createElement('video');
+            video.className = 'cute';
+            video.src = 'cute love gif.mp4';
+            video.autoplay = true;
+            video.loop = true;
+            video.id = 'video';
+            document.getElementById('valentine-question').appendChild(video);
+            messageDiv.style.color = "#4caf50";
+            yesButton.style.display = 'none';
+            noButton.style.display = 'none';
+
+            const clonedButtons = document.querySelectorAll('.cloned-yes');
+            clonedButtons.forEach(btn => btn.remove());
+            document.querySelector('h1').style.display = 'none';
+            document.querySelector('p').style.display = 'none';
+            document.querySelector('.score').style.display = 'none';
+        }
+
+
+        yesButton.addEventListener('click', yesAction);
+
+        noButton.addEventListener('click', () => {
+            messageDiv.textContent = noMessages[noClickCount % noMessages.length];
+            noClickCount++;
+
+            messageDiv.style.color = "#f44336";
+
+            const cloned = yesButton.cloneNode(true);
+            cloned.classList.add('cloned-yes');
+            cloned.addEventListener('click', yesAction);
+            document.getElementById('valentine-question').appendChild(cloned);
+
+            const container = document.querySelector('.container');
+            const containerRect = container.getBoundingClientRect();
+            const yesRect = yesButton.getBoundingClientRect();
+            const buttonWidth = noButton.offsetWidth;
+            const buttonHeight = noButton.offsetHeight;
+            const maxX = containerRect.width - buttonWidth;
+            const maxY = containerRect.height - buttonHeight;
+            let randomX, randomY;
+            do {
+                randomX = Math.random() * maxX;
+                randomY = Math.random() * maxY;
+            } while (randomX < yesRect.right && randomX + buttonWidth > yesRect.left &&
+                     randomY < yesRect.bottom && randomY + buttonHeight > yesRect.top);
+            noButton.style.position = 'absolute';
+            noButton.style.left = randomX + 'px';
+            noButton.style.top = randomY + 'px';
+            document.querySelector('h1').style.display = 'none';
+            document.querySelector('p').style.display = 'none';
+            document.querySelector('.score').style.display = 'none';
+        });
+
+        initBoard();
+    </script>
+</body>
+</html>
