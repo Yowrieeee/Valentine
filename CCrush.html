@@ -160,12 +160,69 @@
                 font-size: 1em;
             }
         }
+
+        /* Larger screens (computers) */
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 800px;
+            }
+            h1 {
+                font-size: 3em;
+            }
+            .game-board {
+                width: 600px;
+                height: 600px;
+                gap: 10px;
+            }
+            .score {
+                font-size: 2em;
+            }
+            button {
+                padding: 15px 30px;
+                font-size: 1.2em;
+            }
+            .valentine-question h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .container {
+                max-width: 1000px;
+            }
+            h1 {
+                font-size: 4em;
+            }
+            .game-board {
+                width: 700px;
+                height: 700px;
+                gap: 12px;
+            }
+            .score {
+                font-size: 2.5em;
+            }
+            button {
+                padding: 20px 40px;
+                font-size: 1.5em;
+            }
+            .valentine-question h2 {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="wrapper"></div>
         <div class="heart1"></div>
     <div id="heart-container"></div>
+    <audio id="matchSound1" preload="auto" src="delicious.mp3"></audio>
+    <audio id="matchSound2" preload="auto" src="divine.mp3"></audio>
+    <audio id="matchSound3" preload="auto" src="sugar-crush.mp3"></audio>
+    <audio id="matchSound4" preload="auto" src="sweet.mp3"></audio>
+    <audio id="matchSound5" preload="auto" src="tasty.mp3"></audio>
+    <audio id="yesSound" preload="auto" src="Nat_King_Cole_-_L-O-V-E_Lyric_Video_256kbps.webm"></audio>
+    <audio id="noSound" preload="auto" src="bruh.mp3"></audio>
+
     <script src="script.js"></script>
     <div class="container">
         <h1>Hii Bebi let's play Candy Crush </h1>
@@ -190,6 +247,15 @@
         const yesButton = document.getElementById('yes');
         const noButton = document.getElementById('no');
         const messageDiv = document.getElementById('message');
+        const yesSound = document.getElementById('yesSound');
+        const noSound = document.getElementById('noSound');
+        const matchSounds = [
+            document.getElementById('matchSound1'),
+            document.getElementById('matchSound2'),
+            document.getElementById('matchSound3'),
+            document.getElementById('matchSound4'),
+            document.getElementById('matchSound5')
+        ];
         let clonedYes = null;
         let noClickCount = 0;
         const noMessages = [
@@ -328,6 +394,9 @@
                 }
             }
             if (hasMatches) {
+                const randomSound = matchSounds[Math.floor(Math.random() * matchSounds.length)];
+                randomSound.currentTime = 0;
+                randomSound.play();
                 dropCandies();
                 updateScore();
             }
@@ -366,6 +435,8 @@
 
 
         function yesAction() {
+            yesSound.currentTime = 0;
+            yesSound.play();
             messageDiv.innerHTML = "Yay! I love you so much, Bebii! 💖<br> Happy Valentine's Day! 💖";
 
             const existingVideo = document.getElementById('video');
@@ -394,6 +465,8 @@
         yesButton.addEventListener('click', yesAction);
 
         noButton.addEventListener('click', () => {
+            noSound.currentTime = 0;
+            noSound.play();
             messageDiv.textContent = noMessages[noClickCount % noMessages.length];
             noClickCount++;
 
@@ -429,4 +502,3 @@
     </script>
 </body>
 </html>
-
