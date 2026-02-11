@@ -171,3 +171,110 @@ body {
         opacity: 0;
     }
 }
+
+/* Responsive Design for Envelope and Hearts */
+@media (max-width: 768px) {
+    .wrapper .envelope {
+        width: 300px;
+        height: 160px;
+    }
+    .wrapper .envelope::before {
+        border-top: 80px solid #ecdeb8;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+    }
+    .wrapper .envelope::after {
+        border-top: 80px solid transparent;
+        border-left: 150px solid #ecdeb8;
+        border-bottom: 80px solid #ecdeb8;
+        border-right: 150px solid #ecdeb8;
+    }
+    .wrapper .heart1 {
+        width: 15px;
+        height: 15px;
+    }
+    .wrapper .heart1::before,
+    .wrapper .heart1::after {
+        width: 15px;
+        height: 15px;
+    }
+    .wrapper .heart1::before {
+        top: -7.5px;
+    }
+    .wrapper .heart1::after {
+        right: 7.5px;
+    }
+    .envelope .letter {
+        width: 50%;
+        padding: 15px 5px;
+        font-size: 8px;
+    }
+    .heart {
+        width: 24px;
+        height: 24px;
+    }
+    .heart::before,
+    .heart::after {
+        width: 24px;
+        height: 24px;
+    }
+    .heart::before {
+        top: -12px;
+    }
+    .heart::after {
+        left: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .wrapper .envelope {
+        width: 250px;
+        height: 130px;
+    }
+    .wrapper .envelope::before {
+        border-top: 65px solid #ecdeb8;
+        border-left: 125px solid transparent;
+        border-right: 125px solid transparent;
+    }
+    .wrapper .envelope::after {
+        border-top: 65px solid transparent;
+        border-left: 125px solid #ecdeb8;
+        border-bottom: 65px solid #ecdeb8;
+        border-right: 125px solid #ecdeb8;
+    }
+    .wrapper .heart1 {
+        width: 12px;
+        height: 12px;
+    }
+    .wrapper .heart1::before,
+    .wrapper .heart1::after {
+        width: 12px;
+        height: 12px;
+    }
+    .wrapper .heart1::before {
+        top: -6px;
+    }
+    .wrapper .heart1::after {
+        right: 6px;
+    }
+    .envelope .letter {
+        width: 45%;
+        padding: 10px 5px;
+        font-size: 7px;
+    }
+    .heart {
+        width: 18px;
+        height: 18px;
+    }
+    .heart::before,
+    .heart::after {
+        width: 18px;
+        height: 18px;
+    }
+    .heart::before {
+        top: -9px;
+    }
+    .heart::after {
+        left: 9px;
+    }
+}
