@@ -169,7 +169,7 @@
     <script src="script.js"></script>
     <div class="container">
         <h1>Hii Bebi let's play Candy Crush </h1>
-        <p>Match 3 or more candies to score points! Reach 300 points to unlock the surprise.</p>
+        <p>Match 3 or more candies to score points! Reach 500 points to unlock the surprise.</p>
         <div class="score" style="display: none;">Score: <span id="score">0</span></div>
         <div class="game-board" id="game-board"></div>
         <div class="valentine-question" id="valentine-question">
@@ -358,7 +358,7 @@
             if (score > 0) {
                 document.querySelector('.score').style.display = 'block';
             }
-            if (score >= 100) {
+            if (score >= 500) {
                 valentineQuestion.style.display = 'block';
                 board.style.display = 'none';
             }
@@ -429,3 +429,4 @@
     </script>
 </body>
 </html>
+
